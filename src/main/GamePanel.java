@@ -77,12 +77,26 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void update(){
-        if(mouseH.targetX != petX || mouseH.targetY != petY){
-            if(mouseH.targetX > petX) petX+=petSpeed;
-            else if(mouseH.targetX < petX) petX -= petSpeed;
 
-            if(mouseH.targetY > petY) petY+=petSpeed;
-            else if(mouseH.targetY < petY) petY -= petSpeed;
+        if(mouseH.targetX != petX || mouseH.targetY != petY){
+
+            if(mouseH.targetX > petX) {
+                if(mouseH.targetX - petX == 1) petX +=1;
+                else petX+=petSpeed;
+            }
+            else if(mouseH.targetX < petX) {
+                if(mouseH.targetX - petX == -1) petX -=1;
+                else petX-=petSpeed;
+            }
+
+            if(mouseH.targetY > petY) {
+                if(mouseH.targetY - petY == 1) petY +=1;
+                else petY+=petSpeed;
+            }
+            else if(mouseH.targetY < petY) {
+                if(mouseH.targetY - petY == -1) petY-=1;
+                else petY-=petSpeed;
+            }
         }
     }
 
