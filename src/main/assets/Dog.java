@@ -24,6 +24,10 @@ public class Dog extends Pet{
         this.x = 100;
         this.y = 100;
         this.speed = 2;
+        this.hunger = 20;
+        this.MAX_HUNGER = 100;
+        this.hunger_rate = 600;
+        this.lifetime = 0;
     }
 
     public void update(){
@@ -47,6 +51,25 @@ public class Dog extends Pet{
                 else y-=speed;
             }
         }
+
+        if(keyH.feed == true){
+            if(hunger + 10 > MAX_HUNGER)
+            {
+                System.out.println("WOOOF!");
+
+            } else {
+                hunger += 10;
+            }
+            keyH.feed = false;
+        }
+
+        lifetime += 1;
+
+        if(lifetime == hunger_rate)
+        {
+            hunger -= 2;
+            lifetime = 0;
+        }
     }
 
     public void paintComponent(Graphics2D g2){
@@ -54,5 +77,8 @@ public class Dog extends Pet{
         g2.setColor(Color.BLACK);
 
         g2.fillRect(x,y,gp.finalTileSize,gp.finalTileSize);
+
+        g2.clearRect(1, 1, MAX_HUNGER, 8);
+        g2.fillRect(1, 1, this.hunger, 8);
     }
 }
