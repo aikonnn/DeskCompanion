@@ -1,6 +1,7 @@
 package main;
 
 import main.assets.Dog;
+import main.assets.Cat;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -26,7 +27,7 @@ public class GamePanel extends JPanel implements Runnable{
     MouseHandler mouseH = new MouseHandler();
     KeyHandler keyH = new KeyHandler();
 
-    Dog pet = new Dog(this, keyH, mouseH);//init as dog for prototyping
+    Cat pet = new Cat(this, keyH, mouseH);//init as dog for prototyping
 
 
     public GamePanel(){
