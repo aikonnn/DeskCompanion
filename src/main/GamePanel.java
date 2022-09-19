@@ -1,5 +1,7 @@
 package main;
 
+import main.assets.Dog;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -11,7 +13,7 @@ public class GamePanel extends JPanel implements Runnable{
     final int tileSize = 16; 
     final int scale = 3;
 
-    final int finalTileSize = tileSize*scale;
+    public final int finalTileSize = tileSize*scale;
     final int maxScreenCol = 8;
     final int maxSceenRow = 6;
     final int screenWidth = finalTileSize * maxScreenCol;
@@ -22,11 +24,10 @@ public class GamePanel extends JPanel implements Runnable{
 
     Thread gameThread; 
     MouseHandler mouseH = new MouseHandler();
+    KeyHandler keyH = new KeyHandler();
 
-    //Pet's default position
-    int petX = 100;
-    int petY = 100;
-    int petSpeed = 2;
+    Dog pet = new Dog(this, keyH, mouseH);//init as dog for prototyping
+
 
     public GamePanel(){
 
@@ -46,58 +47,35 @@ public class GamePanel extends JPanel implements Runnable{
     @Override
     public void run(){
 
-        double deltaTime = 1000000000/FPS; //deltaTime in nanoseconds
-        double nextDrawTime = System.nanoTime()+ deltaTime;
+        double drawInterval = 1000000000/FPS; //deltaTime in nanoseconds
+        double deltaTime = 0;
+        long lastTime = System.nanoTime();
+        long currentTime;
 
         while(gameThread != null){
+            
+            currentTime = System.nanoTime();
 
-            //UPDATE
-            update();
+            deltaTime += (currentTime - lastTime)/drawInterval;
 
-            //DRAW
-            repaint();
+            lastTime = currentTime;
 
-            try{
-                double remainingTime = (nextDrawTime - System.nanoTime());
-                remainingTime = remainingTime/1000000; //in millis
+            if(deltaTime >=1){
                 
-                if(remainingTime < 0){
-                    remainingTime = 0;
-                }
+                //UPDATE
+                update();
 
-                Thread.sleep((long) remainingTime); // Stop game thread from proceeding for the remaining delta time
-                nextDrawTime += deltaTime;
+                //DRAW
+                repaint();
 
-
-            } catch (InterruptedException e){
-                e.printStackTrace();
+                deltaTime -=1;
             }
 
         }
     }
 
     public void update(){
-
-        if(mouseH.targetX != petX || mouseH.targetY != petY){
-
-            if(mouseH.targetX > petX) {
-                if(mouseH.targetX - petX == 1) petX +=1;
-                else petX+=petSpeed;
-            }
-            else if(mouseH.targetX < petX) {
-                if(mouseH.targetX - petX == -1) petX -=1;
-                else petX-=petSpeed;
-            }
-
-            if(mouseH.targetY > petY) {
-                if(mouseH.targetY - petY == 1) petY +=1;
-                else petY+=petSpeed;
-            }
-            else if(mouseH.targetY < petY) {
-                if(mouseH.targetY - petY == -1) petY-=1;
-                else petY-=petSpeed;
-            }
-        }
+        pet.update();
     }
 
     public void paintComponent(Graphics g){
@@ -106,9 +84,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         Graphics2D g2 = (Graphics2D) g;
 
-        g2.setColor(Color.BLACK);
-
-        g2.fillRect(petX,petY,finalTileSize,finalTileSize);
+        pet.paintComponent(g2);
 
         g2.dispose(); //save memory
     }

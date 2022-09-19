@@ -1,32 +1,58 @@
 package main.assets;
 
+import main.GamePanel;
+import main.KeyHandler;
+import main.MouseHandler;
+
+import java.awt.Graphics2D;
+import java.awt.Color;
+
 public class Dog extends Pet{
-    public Dog(){
-        this.hunger = 20;
-        this.happiness = 30;
-        this.age = 20;
-        this.sleepiness = 50;
-        this.health = 100;
+    GamePanel gp;
+    KeyHandler keyH;
+    MouseHandler mouseH;
+
+    public Dog(GamePanel gp, KeyHandler keyH, MouseHandler mouseH)
+    {
+        this.gp = gp;
+        this.keyH = keyH;
+        this.mouseH = mouseH;
+        setDefault();
     }
 
-    public void noise(){
-        System.out.println("Woof!");
+    public void setDefault(){
+        this.x = 100;
+        this.y = 100;
+        this.speed = 2;
     }
 
-    public void sleep(){
-        this.sleepiness = 30;
+    public void update(){
+        if(mouseH.targetX != x || mouseH.targetY != y){
+
+            if(mouseH.targetX > x) {
+                if(mouseH.targetX - x == 1) x +=1;
+                else x+=speed;
+            }
+            else if(mouseH.targetX < x) {
+                if(mouseH.targetX - x == -1) x -=1;
+                else x-=speed;
+            }
+
+            if(mouseH.targetY > y) {
+                if(mouseH.targetY - y == 1) y +=1;
+                else y+=speed;
+            }
+            else if(mouseH.targetY < y) {
+                if(mouseH.targetY - y == -1) y-=1;
+                else y-=speed;
+            }
+        }
     }
 
-    public void feed(){
-        this.hunger += 10;
-    }
+    public void paintComponent(Graphics2D g2){
+        
+        g2.setColor(Color.BLACK);
 
-    public void cure(){
-        this.health = 100;
-    }
-
-    public void play(){
-        this.happiness+= 20;
-        noise();
+        g2.fillRect(x,y,gp.finalTileSize,gp.finalTileSize);
     }
 }

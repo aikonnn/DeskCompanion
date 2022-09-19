@@ -5,8 +5,8 @@ import java.awt.event.MouseListener;
 
 public class MouseHandler implements MouseListener{
 
-    int targetX = 100;
-    int targetY = 100;
+    public int targetX = 100;
+    public int targetY = 100;
 
     @Override
     public void mouseClicked(MouseEvent e) {
